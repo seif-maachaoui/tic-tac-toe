@@ -116,7 +116,11 @@ def retry():
     tableau.delete("all")
     board = [0]*9 #Je réinitialise le contenu de mon tableau
     player = "O" #Je réinitialise le joueur à cercle
-    first_choice["state"], second_choice["state"] = "active" #Je réinitialise l'état des boutons à activé
+
+    #Je réinitialise l'état des boutons 'X' et 'O' à active
+    first_choice["state"] = "active" 
+    second_choice["state"] = "active"
+
     you_win.config(text="") #J'efface aussi le message de victoire
 
 
