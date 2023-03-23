@@ -22,20 +22,20 @@ make_you_choice.place(y=40, x=220)
 first_choice = Button(window, text="O", command=lambda: get_choice("O"))
 second_choice = Button(window, text="X", command=lambda: get_choice("X"))
 first_choice.place(y= 80, x = 300)
-second_choice.place(y = 80, x= 330)
+second_choice.place(y = 80, x= 360)
 
 #Ajout d'un message pour annoncer la victoire d'un joueur
 you_win = Label(window, text= "")
-you_win.place(y = 80, x = 420)
+you_win.place(y = 80, x = 440)
 
 
 # La frame qui va contenir mon canvas
-cadre = Frame(window, bg="grey", width=500, height=500)
+cadre = Frame(window, bg="white", width=500, height=500)
 cadre.place(y = 120, x= 190)
 
 #Je vais créer un tableau qui prendra la forme d'un Canvas
 tableau = Canvas(cadre, bg="black", width=300, height=300)
-tableau.grid(row=1, column=0, sticky="nsew")
+tableau.grid(row=0, column=0, sticky="nsew")
 
 #Je m'occupe de dessiner une grille au sein de mon canvas
 
@@ -107,6 +107,37 @@ def check_victory():
         elif all(case != 0 for case in board):
             you_win.config(text="C'est un match nul !")
 
+# ---- Finalisation de l'interface ------
+
+#J'ajoute une fonction pour recommencer la partie.
+
+def retry():
+    global player, board
+    tableau.delete("all")
+    board = [0]*9 #Je réinitialise le contenu de mon tableau
+    player = "O" #Je réinitialise le joueur à cercle
+    first_choice["state"], second_choice["state"] = "active" #Je réinitialise l'état des boutons à activé
+    you_win.config(text="") #J'efface aussi le message de victoire
+
+
+    #Je retrace ensuite mes 2 lignes horizontale et vertical
+    tableau.create_line(100, 0, 100, 300, width=3, fill="white")
+    tableau.create_line(200, 0, 200, 300, width=3, fill="white")
+    tableau.create_line(0, 100, 300, 100, width=3, fill="white")
+    tableau.create_line(0, 200, 300, 200, width=3, fill="white")
+
+#Et une fonction pour quitter la fenêtre
+def quit():
+    window.destroy
+
+
+#La fonction retry va être appellé par le bouton recommencer
+rejouer = Button(cadre, text="Recommencer", command=retry)
+rejouer.grid(row=1, column=0, sticky="w", padx=55, pady=10)
+
+#Tandis que la fonction quit va être appellé par le bouton exit
+exit = Button(cadre, text="Quitter", command=quit)
+exit.grid(row=1, column=0, sticky="e", padx=65, pady=10)
 
 tableau.bind("<Button-1>", mouse_click) #Appel de la fonction mouse_click au click de la souris
-window.mainloop()
+window.mainloop() #Appel de l'ouverture de l'interface graphique
