@@ -87,32 +87,26 @@ def mouse_click(click):
             tableau.create_line(100*column+8, 100*line+8, 100*column+96, 100*line+96, width=2, fill='#3145f0')
             tableau.create_line(100*column+8, 100*line+96, 100*column+96, 100*line+8, width=2, fill='#3145f0')
             board[line*3+column] = 2          #Sinon on dessiner une croix
-            player = "O"                        #L'autre joueur dessinera un cercle
+            player = "O"
+        
+    check_victory() #J'apelle ma fonction check_victory, pour vérifier l'état du jeu après chaque tour
 
-#Je déclare une fonction pour vérifier si le joueur remporte la victoire
+#Je déclare une fonction pour vérifier si un joueur remporte la victoire
 def check_victory():
-    global board 
+    global player, board
+    #Je créer une liste de tuples qui contient toutes les combinaisons pour gagner
+    win = [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]
 
-    #Vérification des lignes horizontal
-    for i in range (0, 9, 3):
-        if board[i] == board[i+1] == board[i+2] != 0: #Si une ligne horizontal est remplie, alors..
-            return True
-    
-    #Vérification des lignes vertical
-    for i in range(3):
-        if board[i] == board[i+3] == board[i+6] != 0 : #Si une ligne vertical est remplie, alors...
-            return True
+    #Pour chaque symboles qui se retouve dans une des combinaisons de victoire...
+    for symboles in win:
 
-    #Vérification des diagonale de gauche à droite
-    if board[0] == board[4] == board[8] != 0:
-        return True
-    #Vérification de la diagonale de droite à gauche
-    if board[2] == board[4] == board[6] and board[2] != 0:
-        return board[2]
-    
-    #Vérification de match nul 
-    if 0 not in board: #Si toutes les cases sont occupées et qu'aucun joueur n'a gagné, alors...
-        return 0 #match nul
-    return None
+        if all(board[i] == 1 for i in symboles):
+            you_win.config(text="Le premier joueur a gagné !")
+        elif all(board[i] == 2 for i in symboles):
+            you_win.config(text="Le second joueur a gagné !")
+        elif all(case != 0 for case in board):
+            you_win.config(text="C'est un match nul !")
+
+
 tableau.bind("<Button-1>", mouse_click) #Appel de la fonction mouse_click au click de la souris
 window.mainloop()
