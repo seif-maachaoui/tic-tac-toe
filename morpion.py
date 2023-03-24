@@ -132,7 +132,7 @@ def retry():
 
 #Et une fonction pour quitter la fenêtre
 def quit():
-    window.destroy
+    window.destroy()
 
 
 #La fonction retry va être appellé par le bouton recommencer
