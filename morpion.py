@@ -54,6 +54,8 @@ board = [0]*9
 #Je créer une variable player, que j'initialise à "O"
 player = "O"
 
+
+
 #-------- Déclaration des fonctions ---------
 
 #Je souhaite tout d'abord que l'utilisateur puisse soit commencer par le cercle, soit par la croix...
@@ -102,12 +104,28 @@ def check_victory():
 
         if all(board[i] == 1 for i in symboles):
             you_win.config(text="Le premier joueur a gagné !")
+            stop_game()
+            return True
         elif all(board[i] == 2 for i in symboles):
             you_win.config(text="Le second joueur a gagné !")
+            stop_game()
+            return True
         elif all(case != 0 for case in board):
             you_win.config(text="C'est un match nul !")
+            stop_game()
+            return True
+    return False
 
 # ---- Finalisation de l'interface ------
+
+def stop_game():
+    global tableau
+    
+    for item in tableau.find_all():
+        tableau.itemconfig(item, state=DISABLED)
+    tableau.unbind("<Button-1>")
+    
+
 
 #J'ajoute une fonction pour recommencer la partie.
 
@@ -123,12 +141,22 @@ def retry():
 
     you_win.config(text="") #J'efface aussi le message de victoire
 
-
+    
     #Je retrace ensuite mes 2 lignes horizontale et vertical
     tableau.create_line(100, 0, 100, 300, width=3, fill="white")
     tableau.create_line(200, 0, 200, 300, width=3, fill="white")
     tableau.create_line(0, 100, 300, 100, width=3, fill="white")
     tableau.create_line(0, 200, 300, 200, width=3, fill="white")
+
+    #Je réactive le clic de souris sur le canvas
+    tableau.bind("<Button-1>", mouse_click)
+    
+    #Enfin, je réactive les éléments de mon canvas
+    for item in tableau.find_all():
+        tableau.itemconfig(item, state='normal')
+        tableau.itemconfig(item, fill="white")
+
+    
 
 #Et une fonction pour quitter la fenêtre
 def quit():
